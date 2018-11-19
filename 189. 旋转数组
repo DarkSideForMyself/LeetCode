@@ -1,0 +1,21 @@
+class Solution {
+    public void rotate(int[] nums, int k) {
+        /*
+        下面的k = k % nums.length;
+        我一开始想着这不是多此一举嘛，反正扎到了规律，对应的就是(i + k) % nums.length，那么为啥还要对自己取余呢，后来想到，是自己想得不够完善
+        k值并没有说一定比nums.length小，如果k == nums.length，那么相当于没有旋转，当k > nums.length，其实是相当于已经转了一圈后，再次旋转
+        所以这时候取余功能就出来了，反正旋转几圈后没有区别，我们要的只是旋转度在0和nums.length之间，所以取余非常有必要
+        */
+        /*、
+        还有一个非常值得注意的，那就是13行那句，我第一次是直接用int[] temp = nums;
+        结果出现很奇怪的错误，就是结果变成了[2,3,1,1,2,3,1]
+        一开始怎么都不理解怎么搞的，后来单步调试终于明白了，下面的复制把temp的值也修改了，然后用了int[] temp = nums.clone();完美解决
+        */
+        k = k % nums.length;
+        int[] temp = nums.clone();
+        for(int i = 0; i < nums.length; ++i){
+            nums[(i + k) % nums.length] = temp[i];
+        }
+        
+    }
+}
