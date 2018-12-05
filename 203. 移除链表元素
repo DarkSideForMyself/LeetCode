@@ -1,0 +1,45 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+/*
+这个题目我会做，但是没有考虑一个很重要的问题，就是如果链表只有一个元素，和给定值相等，这样的话，应该是返回null
+就是下面第一个代码块；
+第二个代码块中，之所以要判断，是因为如果在第一个代码块中链表变成了null，就需要做判断，否则会出现空指针异常
+*/
+
+class Solution {
+    public ListNode removeElements(ListNode head, int val) {
+        if(head == null){
+            return null;
+        }
+        /*
+        1
+        */
+        while(head != null && head.val == val){
+            head = head.next;
+        }
+        
+        ListNode node = head;
+        
+        /*
+        2
+        */
+        if(node == null){
+            return null;
+        }
+        
+        while(node.next != null){
+            if(node.next.val == val){
+                node.next = node.next.next;
+            }else{
+                node = node.next;
+            }
+        }
+        return head;
+    }
+}
