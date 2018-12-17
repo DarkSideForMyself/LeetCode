@@ -1,0 +1,124 @@
+使用队列实现栈的下列操作：
+
+push(x) -- 元素 x 入栈
+pop() -- 移除栈顶元素
+top() -- 获取栈顶元素
+empty() -- 返回栈是否为空
+注意:
+
+你只能使用队列的基本操作-- 也就是 push to back, peek/pop from front, size, 和 is empty 这些操作是合法的。
+你所使用的语言也许不支持队列。 你可以使用 list 或者 deque（双端队列）来模拟一个队列 , 只要是标准的队列操作即可。
+你可以假设所有操作都是有效的（例如, 对一个空的栈不会调用 pop 或者 top 操作）。
+
+class MyStack {
+    /*
+    很基础的一道题，其实就是考虑要把后进先出改为先进先出，问题就在于对java队列不了解，趁此机会正好学了学里面的方法，附在下面
+    */
+    
+    /*
+        //队列用linkedlist来实现
+        Queue<String> queue = new LinkedList<String>();
+        //添加元素
+        queue.offer("a");
+        queue.offer("b");
+        queue.offer("c");
+        queue.offer("d");
+        queue.offer("e");
+
+        foreachQueue(queue);
+        System.out.println("-----------");
+
+        //poll()方法,会返回第一个元素，并且删除
+        System.out.println("poll = " + queue.poll());
+        foreachQueue(queue);
+        System.out.println("-----------");
+
+        //element()方法，只会返回第一个元素
+        //该方法区别于peek()方法在于如果queue为空则会抛出异常，而peek会返回null
+        System.out.println("element = " + queue.element());
+        foreachQueue(queue);
+        System.out.println("-----------");
+
+        //peek()方法，返回第一个元素
+        System.out.println("peek = " + queue.peek());
+        foreachQueue(queue);
+        System.out.println("-----------");
+    */
+    
+    Queue<Integer> queue1;
+    Queue<Integer> queue2;
+    int size;
+
+    /** Initialize your data structure here. */
+    public MyStack() {
+        this.queue1 = new LinkedList<Integer>();
+        this.queue2 = new LinkedList<Integer>();
+        this.size = 0;
+    }
+    
+    /** Push element x onto stack. */
+    public void push(int x) {
+        if(queue1.isEmpty()){
+            queue2.offer(x);
+        }else{
+            queue1.offer(x);
+        }
+        size++;
+    }
+    
+    /** Removes the element on top of the stack and returns that element. */
+    public int pop() {
+        if(size == 0){
+            return -1;
+        }
+        int res = 0;
+        if(queue1.isEmpty()){
+            // 将前面的数都offer在另一个队列里面，只留下最后一个数
+            //因为队列是先进先出，栈是后进先出
+            for(int i = 0; i < size - 1; i++){
+                queue1.offer(queue2.poll());
+            }
+            res = queue2.poll();
+        }else{
+            for(int i = 0; i < size - 1; i++){
+                queue2.offer(queue1.poll());
+            }
+            res = queue1.poll();
+        }
+        size--;
+        return res;
+    }
+    
+    /** Get the top element. */
+    public int top() {
+        if(size == 0){
+            return -1;
+        }
+        
+        //先执行pop，就是上面的方法
+        int top = pop();
+        //然后将pop出来的数再塞回队列
+        if(queue1.isEmpty()){
+            queue2.offer(top);
+        }else{
+            queue1.offer(top);
+        }
+        size++;
+        return top;
+        
+    }
+    
+    /** Returns whether the stack is empty. */
+    public boolean empty() {
+        return size == 0;
+    }
+}
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack obj = new MyStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * boolean param_4 = obj.empty();
+ */
