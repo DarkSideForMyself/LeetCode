@@ -1,0 +1,53 @@
+请判断一个链表是否为回文链表。
+
+示例 1:
+
+输入: 1->2
+输出: false
+示例 2:
+
+输入: 1->2->2->1
+输出: true
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+/*
+快指针和慢指针这个确实明白，但是应用在回文链表，有点不太理解
+链表用到了快慢指针，快指针每次跳两下，慢指针每次跳一下，这样快指针到终点的时候慢指针刚好一般，然后反转后半部分链表进行对比。
+这个是思路，我得多理解理解
+*/
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        if(head == null || head.next == null){
+            return true;
+        }
+        ListNode slow = head;
+        ListNode fast = head;
+        while(fast.next != null && fast.next.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        ListNode last = slow.next;
+        ListNode pre = head;
+        while(last.next != null){
+            ListNode tmp = last.next;
+            last.next = tmp.next;
+            tmp.next = slow.next;
+            slow.next = tmp;
+        }
+        while(slow.next != null){
+            slow = slow.next;
+            if(pre.val != slow.val){
+                return false;
+            }
+            pre = pre.next;
+        }
+        return true;
+    }
+}
